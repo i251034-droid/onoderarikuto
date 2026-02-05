@@ -111,6 +111,10 @@ const LoveCounselingApp = () => {
 
       const data = await response.json();
 
+      if (data.error) {
+        throw new Error(data.error.message || 'API Error');
+      }
+
       if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
         const assistantMessage = {
           role: 'assistant',
@@ -121,10 +125,16 @@ const LoveCounselingApp = () => {
         throw new Error('Invalid response from API');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error sending message:', error);
+      let errorMessage = 'エラーが発生しました。もう一度お試しください。';
+      if (error.message.includes('API key')) {
+        errorMessage = 'APIキーの設定を確認してください。';
+      } else if (error.message.includes('Fetch error')) {
+        errorMessage = '通信エラーが発生しました。インターネット接続を確認してください。';
+      }
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'エラーが発生しました。もう一度お試しください。'
+        content: errorMessage
       }]);
     } finally {
       setIsLoading(false);
@@ -378,26 +388,26 @@ const LoveCounselingApp = () => {
 
   if (!avatar) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sakura-100 via-cream-100 to-peach-100 flex items-center justify-center p-4">
-        <div className="bg-white rounded-[2.5rem] shadow-glow p-10 max-w-lg w-full text-center border-4 border-sakura-200">
-          <Heart className="w-24 h-24 mx-auto mb-6 text-sakura-500 animate-bounce" />
-          <h1 className="text-4xl font-extrabold mb-4 bg-gradient-to-r from-sakura-500 to-peach-500 bg-clip-text text-transparent transform -rotate-2">
+      <div className="min-h-screen bg-gradient-to-br from-pink-100 via-white to-orange-100 flex items-center justify-center p-4">
+        <div className="bg-white rounded-[2rem] shadow-2xl p-10 max-w-lg w-full text-center border-4 border-pink-200">
+          <Heart className="w-24 h-24 mx-auto mb-6 text-pink-500 animate-bounce" />
+          <h1 className="text-4xl font-extrabold mb-4 bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent transform -rotate-2">
             恋愛相談アプリ
           </h1>
           <p className="text-xl text-gray-600 mb-10 font-bold">あなたのアバターを選んでね♪</p>
           <div className="flex gap-6 justify-center">
             <button
               onClick={() => setAvatar('female')}
-              className="group flex flex-col items-center gap-3 p-6 rounded-[2rem] border-4 border-sakura-200 bg-white hover:border-sakura-500 hover:bg-sakura-50 transition-all shadow-chunky hover:shadow-chunky-hover transform hover:-translate-y-1"
+              className="group flex flex-col items-center gap-3 p-6 rounded-[2rem] border-4 border-pink-200 bg-white hover:border-pink-500 hover:bg-pink-50 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
             >
-              <div className="w-24 h-24 bg-gradient-to-br from-sakura-400 to-sakura-600 rounded-full flex items-center justify-center text-white text-5xl shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-24 h-24 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center text-white text-5xl shadow-lg group-hover:scale-110 transition-transform">
                 👩
               </div>
               <span className="text-xl font-bold text-gray-700">女性</span>
             </button>
             <button
               onClick={() => setAvatar('male')}
-              className="group flex flex-col items-center gap-3 p-6 rounded-[2rem] border-4 border-blue-200 bg-white hover:border-blue-500 hover:bg-blue-50 transition-all shadow-chunky hover:shadow-chunky-hover transform hover:-translate-y-1"
+              className="group flex flex-col items-center gap-3 p-6 rounded-[2rem] border-4 border-blue-200 bg-white hover:border-blue-500 hover:bg-blue-50 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
             >
               <div className="w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white text-5xl shadow-lg group-hover:scale-110 transition-transform">
                 👨
@@ -411,22 +421,22 @@ const LoveCounselingApp = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sakura-100 via-cream-100 to-peach-100 font-rounded">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-orange-50 font-rounded">
       <div className="max-w-4xl mx-auto pb-24">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-md shadow-glow p-4 sticky top-0 z-50 border-b-4 border-sakura-100">
+        <div className="bg-white/80 backdrop-blur-md shadow-lg p-4 sticky top-0 z-50 border-b-4 border-pink-100">
           <div className="flex items-center justify-between max-w-4xl mx-auto">
             <div className="flex items-center gap-4">
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl border-2 border-white shadow-md ${avatar === 'female' ? 'bg-gradient-to-br from-sakura-400 to-sakura-600' : 'bg-gradient-to-br from-blue-400 to-blue-600'
+              <div className={`w-14 h-14 rounded-full flex items-center justify-center text-3xl border-4 border-white shadow-md ${avatar === 'female' ? 'bg-gradient-to-br from-pink-400 to-pink-600' : 'bg-gradient-to-br from-blue-400 to-blue-600'
                 }`}>
                 {avatar === 'female' ? '👩' : '👨'}
               </div>
-              <h1 className="text-2xl font-extrabold bg-gradient-to-r from-sakura-500 to-peach-500 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-extrabold bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent">
                 恋愛相談アプリ
               </h1>
             </div>
-            <div className="bg-sakura-100 p-2 rounded-full">
-              <Heart className="w-8 h-8 text-sakura-500 fill-current animate-pulse" />
+            <div className="bg-pink-100 p-3 rounded-full shadow-inner">
+              <Heart className="w-8 h-8 text-pink-500 fill-current animate-pulse" />
             </div>
           </div>
         </div>
@@ -434,15 +444,17 @@ const LoveCounselingApp = () => {
         {/* Content */}
         <div className="p-6">
           {activeTab === 'chat' && (
-            <div className="bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-white/50">
-              <div className="bg-gradient-to-r from-sakura-500 to-peach-500 p-4 text-white">
-                <h2 className="text-lg font-bold mb-3">AI恋愛カウンセラー</h2>
-                <div className="flex gap-2">
+            <div className="bg-white rounded-[2rem] shadow-xl overflow-hidden border-4 border-white">
+              <div className="bg-gradient-to-r from-pink-500 to-orange-400 p-6 text-white">
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <span className="text-2xl">🤖</span> AI恋愛カウンセラー
+                </h2>
+                <div className="flex gap-3">
                   <button
                     onClick={() => setChatMode('empathy')}
-                    className={`flex-1 py-3 px-6 rounded-full transition-all border-2 ${chatMode === 'empathy'
-                      ? 'bg-white text-sakura-500 font-bold shadow-chunky border-sakura-200 transform -translate-y-1'
-                      : 'bg-sakura-400/30 text-white hover:bg-sakura-400/50 border-transparent'
+                    className={`flex-1 py-3 px-6 rounded-full transition-all border-4 ${chatMode === 'empathy'
+                      ? 'bg-white text-pink-500 font-bold shadow-lg border-pink-200 transform -translate-y-1'
+                      : 'bg-white/20 text-white hover:bg-white/30 border-transparent'
                       }`}
                   >
                     <Heart className="w-5 h-5 inline mr-2" />
@@ -450,9 +462,9 @@ const LoveCounselingApp = () => {
                   </button>
                   <button
                     onClick={() => setChatMode('solution')}
-                    className={`flex-1 py-3 px-6 rounded-full transition-all border-2 ${chatMode === 'solution'
-                      ? 'bg-white text-peach-500 font-bold shadow-chunky border-peach-200 transform -translate-y-1'
-                      : 'bg-peach-400/30 text-white hover:bg-peach-400/50 border-transparent'
+                    className={`flex-1 py-3 px-6 rounded-full transition-all border-4 ${chatMode === 'solution'
+                      ? 'bg-white text-orange-500 font-bold shadow-lg border-orange-200 transform -translate-y-1'
+                      : 'bg-white/20 text-white hover:bg-white/30 border-transparent'
                       }`}
                   >
                     <Sparkles className="w-5 h-5 inline mr-2" />
@@ -470,9 +482,9 @@ const LoveCounselingApp = () => {
                 )}
                 {messages.map((msg, idx) => (
                   <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[85%] p-4 rounded-[1.5rem] whitespace-pre-wrap text-lg font-medium shadow-sm ${msg.role === 'user'
-                      ? 'bg-gradient-to-r from-sakura-400 to-sakura-500 text-white rounded-tr-none shadow-glow'
-                      : 'bg-white text-gray-700 border-2 border-sakura-100 rounded-tl-none'
+                    <div className={`max-w-[85%] p-5 rounded-[2rem] whitespace-pre-wrap text-lg font-medium shadow-sm ${msg.role === 'user'
+                      ? 'bg-gradient-to-tr from-pink-400 to-pink-500 text-white rounded-tr-none shadow-md'
+                      : 'bg-white text-gray-700 border-4 border-pink-100 rounded-tl-none'
                       }`}>
                       {msg.content}
                     </div>
@@ -500,12 +512,12 @@ const LoveCounselingApp = () => {
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                     placeholder="恋愛の悩みを入力してね..."
-                    className="flex-1 p-4 text-lg rounded-full border-4 border-sakura-100 focus:border-sakura-500 focus:outline-none placeholder-sakura-300"
+                    className="flex-1 p-4 text-lg rounded-full border-4 border-pink-200 focus:border-pink-500 focus:outline-none placeholder-pink-300 bg-pink-50"
                   />
                   <button
                     onClick={sendMessage}
                     disabled={isLoading || !inputText.trim()}
-                    className="bg-gradient-to-r from-sakura-500 to-peach-500 text-white p-4 rounded-full hover:shadow-chunky transition-all disabled:opacity-50 transform hover:-translate-y-1"
+                    className="bg-gradient-to-r from-pink-500 to-orange-500 text-white p-4 rounded-full hover:shadow-lg transition-all disabled:opacity-50 transform hover:-translate-y-1 shadow-md"
                   >
                     <Send className="w-6 h-6" />
                   </button>
@@ -515,40 +527,40 @@ const LoveCounselingApp = () => {
           )}
 
           {activeTab === 'fortune' && (
-            <div className="bg-white rounded-[2.5rem] shadow-glow p-8 border-4 border-sakura-100">
-              <h2 className="text-3xl font-extrabold text-center mb-8 bg-gradient-to-r from-sakura-500 to-peach-500 bg-clip-text text-transparent transform -rotate-1">
+            <div className="bg-white rounded-[2.5rem] shadow-xl p-8 border-4 border-pink-100">
+              <h2 className="text-3xl font-extrabold text-center mb-8 bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent transform -rotate-1">
                 今日の恋愛運
               </h2>
 
               {!fortuneRevealed ? (
                 <div className="text-center py-12">
-                  <div className="w-48 h-64 mx-auto mb-8 bg-gradient-to-br from-peach-400 to-sakura-500 rounded-3xl shadow-chunky flex items-center justify-center cursor-pointer hover:scale-105 transition-transform relative overflow-hidden border-4 border-white"
+                  <div className="w-56 h-72 mx-auto mb-10 bg-gradient-to-br from-orange-300 to-pink-400 rounded-[2rem] shadow-xl flex items-center justify-center cursor-pointer hover:scale-105 transition-transform relative overflow-hidden border-4 border-white ring-4 ring-pink-100"
                     onClick={generateDailyFortune}>
-                    <div className="absolute inset-0 bg-gradient-to-br from-peach-400/20 to-sakura-400/20 animate-pulse"></div>
-                    <Moon className="w-24 h-24 text-white relative z-10 animate-bounce" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-pink-400/20 animate-pulse"></div>
+                    <Moon className="w-32 h-32 text-white relative z-10 animate-bounce" />
                   </div>
                   <button
                     onClick={generateDailyFortune}
-                    className="bg-gradient-to-r from-sakura-500 to-peach-500 text-white text-xl font-bold px-10 py-4 rounded-full shadow-chunky hover:shadow-chunky-hover transition-all transform hover:-translate-y-1"
+                    className="bg-gradient-to-r from-pink-500 to-orange-500 text-white text-2xl font-bold px-12 py-5 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 hover:scale-105"
                   >
                     カードをめくる
                   </button>
                 </div>
               ) : (
                 <div className="text-center animate-fade-in">
-                  <div className="mb-6 p-6 bg-gradient-to-br from-peach-50 to-sakura-50 rounded-2xl border border-sakura-100">
-                    <div className="text-xl font-bold text-peach-600 mb-2">{dailyFortune.card}</div>
-                    <Sun className="w-12 h-12 mx-auto text-yellow-500 mb-2" />
+                  <div className="mb-6 p-8 bg-gradient-to-br from-orange-50 to-pink-50 rounded-[2rem] border-4 border-pink-100">
+                    <div className="text-2xl font-bold text-orange-500 mb-2">{dailyFortune.card}</div>
+                    <Sun className="w-16 h-16 mx-auto text-yellow-400 mb-2" />
                   </div>
-                  <div className="text-6xl font-bold text-sakura-500 mb-4">{dailyFortune.luck}%</div>
-                  <div className="text-xl mb-6">{dailyFortune.message}</div>
-                  <div className="bg-sakura-50 p-4 rounded-2xl border border-sakura-100">
-                    <p className="text-sm text-gray-600 mb-2">ラッキーアイテム</p>
-                    <p className="text-lg font-semibold text-sakura-600">{dailyFortune.item}</p>
+                  <div className="text-7xl font-black text-pink-500 mb-6 drop-shadow-sm">{dailyFortune.luck}%</div>
+                  <div className="text-2xl mb-8 font-bold text-gray-700">{dailyFortune.message}</div>
+                  <div className="bg-pink-50 p-6 rounded-[1.5rem] border-2 border-pink-100">
+                    <p className="text-sm text-gray-500 mb-2 font-bold">ラッキーアイテム</p>
+                    <p className="text-xl font-bold text-pink-500">{dailyFortune.item}</p>
                   </div>
                   <button
                     onClick={() => setFortuneRevealed(false)}
-                    className="mt-6 text-peach-500 hover:text-peach-600 transition-colors"
+                    className="mt-8 text-orange-500 hover:text-orange-600 transition-colors font-bold text-lg border-b-2 border-orange-200"
                   >
                     もう一度めくる
                   </button>
@@ -558,8 +570,8 @@ const LoveCounselingApp = () => {
           )}
 
           {activeTab === 'quiz' && (
-            <div className="bg-white rounded-[2.5rem] shadow-glow p-8 border-4 border-sakura-100">
-              <h2 className="text-3xl font-extrabold text-center mb-8 bg-gradient-to-r from-sakura-500 to-peach-500 bg-clip-text text-transparent">
+            <div className="bg-white rounded-[2.5rem] shadow-xl p-8 border-4 border-pink-100">
+              <h2 className="text-3xl font-extrabold text-center mb-8 bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent">
                 恋愛性格診断
               </h2>
 
@@ -572,7 +584,7 @@ const LoveCounselingApp = () => {
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
-                        className="bg-gradient-to-r from-sakura-500 to-peach-500 h-2 rounded-full transition-all duration-300"
+                        className="bg-gradient-to-r from-pink-500 to-orange-500 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${(quizStep / quizQuestions.length) * 100}%` }}
                       ></div>
                     </div>
@@ -587,7 +599,7 @@ const LoveCounselingApp = () => {
                         <button
                           key={idx}
                           onClick={() => submitQuizAnswer(idx)}
-                          className="w-full p-6 text-lg font-bold text-left rounded-2xl border-4 border-gray-100 hover:border-sakura-400 hover:bg-sakura-50 transition-all hover:shadow-md hover:text-sakura-600"
+                          className="w-full p-6 text-lg font-bold text-left rounded-[1.5rem] border-4 border-gray-100 hover:border-pink-400 hover:bg-pink-50 transition-all hover:shadow-lg hover:text-pink-600 active:scale-95"
                         >
                           {option}
                         </button>
@@ -597,10 +609,10 @@ const LoveCounselingApp = () => {
                 </div>
               ) : (
                 <div className="text-center animate-fade-in">
-                  <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-sakura-400 to-peach-400 rounded-full flex items-center justify-center">
-                    <Heart className="w-12 h-12 text-white" />
+                  <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-pink-400 to-orange-400 rounded-full flex items-center justify-center shadow-lg border-4 border-white ring-4 ring-pink-100">
+                    <Heart className="w-16 h-16 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-2 text-sakura-600">{quizResult.name}</h3>
+                  <h3 className="text-3xl font-black mb-4 text-pink-500">{quizResult.name}</h3>
                   <p className="text-gray-700 mb-6 leading-relaxed">{quizResult.description}</p>
                   <button
                     onClick={() => {
@@ -608,7 +620,7 @@ const LoveCounselingApp = () => {
                       setQuizAnswers([]);
                       setQuizResult(null);
                     }}
-                    className="bg-gradient-to-r from-sakura-500 to-peach-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
+                    className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-10 py-4 rounded-full font-bold hover:shadow-xl transition-all text-xl transform hover:-translate-y-1"
                   >
                     もう一度診断する
                   </button>
@@ -618,8 +630,8 @@ const LoveCounselingApp = () => {
           )}
 
           {activeTab === 'compatibility' && (
-            <div className="bg-white rounded-[2.5rem] shadow-glow p-8 border-4 border-sakura-100">
-              <h2 className="text-3xl font-extrabold text-center mb-8 bg-gradient-to-r from-sakura-500 to-peach-500 bg-clip-text text-transparent">
+            <div className="bg-white rounded-[2.5rem] shadow-xl p-8 border-4 border-pink-100">
+              <h2 className="text-3xl font-extrabold text-center mb-8 bg-gradient-to-r from-pink-500 to-orange-500 bg-clip-text text-transparent">
                 相性診断
               </h2>
 
@@ -635,7 +647,7 @@ const LoveCounselingApp = () => {
                         placeholder="年"
                         value={compatibilityInput.userYear}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, userYear: e.target.value })}
-                        className="flex-1 p-4 text-lg rounded-2xl border-4 border-sakura-100 focus:border-sakura-500 focus:outline-none"
+                        className="flex-1 p-4 text-lg rounded-[1.5rem] border-4 border-pink-100 focus:border-pink-500 focus:outline-none bg-pink-50 font-bold"
                         min="1900"
                         max="2100"
                       />
@@ -644,7 +656,7 @@ const LoveCounselingApp = () => {
                         placeholder="月"
                         value={compatibilityInput.userMonth}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, userMonth: e.target.value })}
-                        className="w-20 p-3 rounded-xl border-2 border-sakura-100 focus:border-sakura-500 focus:outline-none"
+                        className="w-24 p-4 text-lg rounded-[1.5rem] border-4 border-pink-100 focus:border-pink-500 focus:outline-none bg-pink-50 font-bold text-center"
                         min="1"
                         max="12"
                       />
@@ -653,15 +665,15 @@ const LoveCounselingApp = () => {
                         placeholder="日"
                         value={compatibilityInput.userDay}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, userDay: e.target.value })}
-                        className="w-20 p-3 rounded-xl border-2 border-sakura-100 focus:border-sakura-500 focus:outline-none"
+                        className="w-24 p-4 text-lg rounded-[1.5rem] border-4 border-pink-100 focus:border-pink-500 focus:outline-none bg-pink-50 font-bold text-center"
                         min="1"
                         max="31"
                       />
                     </div>
                   </div>
 
-                  <div className="text-center">
-                    <Heart className="w-8 h-8 mx-auto text-sakura-400" />
+                  <div className="text-center py-2">
+                    <Heart className="w-10 h-10 mx-auto text-pink-300 animate-pulse" />
                   </div>
 
                   <div>
@@ -674,7 +686,7 @@ const LoveCounselingApp = () => {
                         placeholder="年"
                         value={compatibilityInput.partnerYear}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, partnerYear: e.target.value })}
-                        className="flex-1 p-4 text-lg rounded-2xl border-4 border-sakura-100 focus:border-sakura-500 focus:outline-none"
+                        className="flex-1 p-4 text-lg rounded-[1.5rem] border-4 border-pink-100 focus:border-pink-500 focus:outline-none bg-pink-50 font-bold"
                         min="1900"
                         max="2100"
                       />
@@ -683,7 +695,7 @@ const LoveCounselingApp = () => {
                         placeholder="月"
                         value={compatibilityInput.partnerMonth}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, partnerMonth: e.target.value })}
-                        className="w-20 p-3 rounded-xl border-2 border-sakura-100 focus:border-sakura-500 focus:outline-none"
+                        className="w-24 p-4 text-lg rounded-[1.5rem] border-4 border-pink-100 focus:border-pink-500 focus:outline-none bg-pink-50 font-bold text-center"
                         min="1"
                         max="12"
                       />
@@ -692,7 +704,7 @@ const LoveCounselingApp = () => {
                         placeholder="日"
                         value={compatibilityInput.partnerDay}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, partnerDay: e.target.value })}
-                        className="w-20 p-3 rounded-xl border-2 border-sakura-100 focus:border-sakura-500 focus:outline-none"
+                        className="w-24 p-4 text-lg rounded-[1.5rem] border-4 border-pink-100 focus:border-pink-500 focus:outline-none bg-pink-50 font-bold text-center"
                         min="1"
                         max="31"
                       />
@@ -703,7 +715,7 @@ const LoveCounselingApp = () => {
                     onClick={calculateCompatibility}
                     disabled={!compatibilityInput.userYear || !compatibilityInput.userMonth || !compatibilityInput.userDay ||
                       !compatibilityInput.partnerYear || !compatibilityInput.partnerMonth || !compatibilityInput.partnerDay}
-                    className="w-full bg-gradient-to-r from-sakura-500 to-peach-500 text-white text-xl py-5 rounded-full font-bold shadow-chunky hover:shadow-chunky-hover transition-all disabled:opacity-50 transform hover:-translate-y-1"
+                    className="w-full bg-gradient-to-r from-pink-500 to-orange-500 text-white text-2xl py-6 rounded-full font-bold shadow-xl hover:shadow-2xl transition-all disabled:opacity-50 transform hover:-translate-y-1 mt-4"
                   >
                     相性を診断する
                   </button>
@@ -716,7 +728,7 @@ const LoveCounselingApp = () => {
                         cx="80"
                         cy="80"
                         r="70"
-                        stroke="#ffe4e6"
+                        stroke="#fce7f3"
                         strokeWidth="12"
                         fill="none"
                       />
@@ -733,19 +745,19 @@ const LoveCounselingApp = () => {
                       />
                       <defs>
                         <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" stopColor="#f43f5e" />
+                          <stop offset="0%" stopColor="#ec4899" />
                           <stop offset="100%" stopColor="#f97316" />
                         </linearGradient>
                       </defs>
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-sakura-500">{compatibilityResult.score}%</span>
+                      <span className="text-5xl font-black text-pink-500 drop-shadow-sm">{compatibilityResult.score}%</span>
                     </div>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-sakura-600 mb-3">{compatibilityResult.message}</h3>
-                  <div className="bg-sakura-50 p-5 rounded-2xl mb-6 border border-sakura-100">
-                    <p className="text-gray-700 leading-relaxed text-left">{compatibilityResult.detail}</p>
+                  <h3 className="text-3xl font-bold text-pink-600 mb-4">{compatibilityResult.message}</h3>
+                  <div className="bg-pink-50 p-6 rounded-[1.5rem] mb-8 border-4 border-pink-100">
+                    <p className="text-gray-800 leading-relaxed text-left font-medium text-lg">{compatibilityResult.detail}</p>
                   </div>
 
                   <button
@@ -753,7 +765,7 @@ const LoveCounselingApp = () => {
                       setCompatibilityResult(null);
                       setCompatibilityInput({ userYear: '', userMonth: '', userDay: '', partnerYear: '', partnerMonth: '', partnerDay: '' });
                     }}
-                    className="bg-gradient-to-r from-sakura-500 to-peach-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
+                    className="bg-gradient-to-r from-pink-500 to-orange-500 text-white px-10 py-4 rounded-full font-bold hover:shadow-xl transition-all text-xl transform hover:-translate-y-1"
                   >
                     もう一度診断する
                   </button>
@@ -764,11 +776,11 @@ const LoveCounselingApp = () => {
         </div>
 
         {/* Bottom Navigation */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg shadow-[0_-5px_20px_rgba(255,182,193,0.3)] border-t-4 border-sakura-100 rounded-t-[2rem]">
-          <div className="max-w-4xl mx-auto flex justify-around p-4 pb-6">
+        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg shadow-[0_-5px_20px_rgba(255,182,193,0.4)] border-t-4 border-pink-100 rounded-t-[2.5rem]">
+          <div className="max-w-4xl mx-auto flex justify-around p-4 pb-8">
             <button
               onClick={() => setActiveTab('chat')}
-              className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${activeTab === 'chat' ? 'text-sakura-500 bg-sakura-50 scale-110 shadow-sm' : 'text-gray-300 hover:text-sakura-300'
+              className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${activeTab === 'chat' ? 'text-pink-500 bg-pink-50 scale-110 shadow-md ring-2 ring-pink-100' : 'text-gray-400 hover:text-pink-300'
                 }`}
             >
               <MessageCircle className={`w-8 h-8 ${activeTab === 'chat' ? 'fill-current' : ''}`} />
@@ -776,7 +788,7 @@ const LoveCounselingApp = () => {
             </button>
             <button
               onClick={() => setActiveTab('fortune')}
-              className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${activeTab === 'fortune' ? 'text-sakura-500 bg-sakura-50 scale-110 shadow-sm' : 'text-gray-300 hover:text-sakura-300'
+              className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${activeTab === 'fortune' ? 'text-pink-500 bg-pink-50 scale-110 shadow-md ring-2 ring-pink-100' : 'text-gray-400 hover:text-pink-300'
                 }`}
             >
               <Sparkles className={`w-8 h-8 ${activeTab === 'fortune' ? 'fill-current' : ''}`} />
@@ -784,7 +796,7 @@ const LoveCounselingApp = () => {
             </button>
             <button
               onClick={() => setActiveTab('quiz')}
-              className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${activeTab === 'quiz' ? 'text-sakura-500 bg-sakura-50 scale-110 shadow-sm' : 'text-gray-300 hover:text-sakura-300'
+              className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${activeTab === 'quiz' ? 'text-pink-500 bg-pink-50 scale-110 shadow-md ring-2 ring-pink-100' : 'text-gray-400 hover:text-pink-300'
                 }`}
             >
               <User className={`w-8 h-8 ${activeTab === 'quiz' ? 'fill-current' : ''}`} />
@@ -792,7 +804,7 @@ const LoveCounselingApp = () => {
             </button>
             <button
               onClick={() => setActiveTab('compatibility')}
-              className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${activeTab === 'compatibility' ? 'text-sakura-500 bg-sakura-50 scale-110 shadow-sm' : 'text-gray-300 hover:text-sakura-300'
+              className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${activeTab === 'compatibility' ? 'text-pink-500 bg-pink-50 scale-110 shadow-md ring-2 ring-pink-100' : 'text-gray-400 hover:text-pink-300'
                 }`}
             >
               <Users className={`w-8 h-8 ${activeTab === 'compatibility' ? 'fill-current' : ''}`} />
