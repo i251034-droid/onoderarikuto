@@ -378,19 +378,19 @@ const LoveCounselingApp = () => {
 
   if (!avatar) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-sakura-100 via-cream-100 to-peach-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
-          <Heart className="w-16 h-16 mx-auto mb-4 text-pink-500" />
-          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+          <Heart className="w-16 h-16 mx-auto mb-4 text-sakura-500" />
+          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-sakura-500 to-peach-500 bg-clip-text text-transparent">
             恋愛相談アプリ
           </h1>
           <p className="text-gray-600 mb-8">あなたのアバターを選んでください</p>
           <div className="flex gap-4 justify-center">
             <button
               onClick={() => setAvatar('female')}
-              className="flex flex-col items-center gap-2 p-6 rounded-2xl border-2 border-pink-200 hover:border-pink-500 hover:bg-pink-50 transition-all"
+              className="flex flex-col items-center gap-2 p-6 rounded-3xl border-2 border-sakura-200 hover:border-sakura-500 hover:bg-sakura-50 transition-all"
             >
-              <div className="w-20 h-20 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center text-white text-3xl">
+              <div className="w-20 h-20 bg-gradient-to-br from-sakura-400 to-sakura-600 rounded-full flex items-center justify-center text-white text-3xl">
                 👩
               </div>
               <span className="font-semibold text-gray-700">女性</span>
@@ -411,34 +411,34 @@ const LoveCounselingApp = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
+    <div className="min-h-screen bg-gradient-to-br from-sakura-100 via-cream-100 to-peach-100">
       <div className="max-w-4xl mx-auto pb-20">
         {/* Header */}
         <div className="bg-white shadow-lg p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xl ${avatar === 'female' ? 'bg-gradient-to-br from-pink-400 to-pink-600' : 'bg-gradient-to-br from-blue-400 to-blue-600'
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xl ${avatar === 'female' ? 'bg-gradient-to-br from-sakura-400 to-sakura-600' : 'bg-gradient-to-br from-blue-400 to-blue-600'
               }`}>
               {avatar === 'female' ? '👩' : '👨'}
             </div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-sakura-500 to-peach-500 bg-clip-text text-transparent">
               恋愛相談アプリ
             </h1>
           </div>
-          <Heart className="w-6 h-6 text-pink-500" />
+          <Heart className="w-6 h-6 text-sakura-500" />
         </div>
 
         {/* Content */}
         <div className="p-4">
           {activeTab === 'chat' && (
-            <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-              <div className="bg-gradient-to-r from-pink-500 to-purple-500 p-4 text-white">
+            <div className="bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-white/50">
+              <div className="bg-gradient-to-r from-sakura-500 to-peach-500 p-4 text-white">
                 <h2 className="text-lg font-bold mb-3">AI恋愛カウンセラー</h2>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setChatMode('empathy')}
                     className={`flex-1 py-2 px-4 rounded-full transition-all ${chatMode === 'empathy'
-                        ? 'bg-white text-pink-500 font-semibold'
-                        : 'bg-pink-400/30 text-white'
+                      ? 'bg-white text-sakura-500 font-semibold shadow-sm'
+                      : 'bg-sakura-400/30 text-white hover:bg-sakura-400/50'
                       }`}
                   >
                     <Heart className="w-4 h-4 inline mr-1" />
@@ -447,8 +447,8 @@ const LoveCounselingApp = () => {
                   <button
                     onClick={() => setChatMode('solution')}
                     className={`flex-1 py-2 px-4 rounded-full transition-all ${chatMode === 'solution'
-                        ? 'bg-white text-purple-500 font-semibold'
-                        : 'bg-purple-400/30 text-white'
+                      ? 'bg-white text-peach-500 font-semibold shadow-sm'
+                      : 'bg-peach-400/30 text-white hover:bg-peach-400/50'
                       }`}
                   >
                     <Sparkles className="w-4 h-4 inline mr-1" />
@@ -467,8 +467,8 @@ const LoveCounselingApp = () => {
                 {messages.map((msg, idx) => (
                   <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-[80%] p-3 rounded-2xl whitespace-pre-wrap ${msg.role === 'user'
-                        ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white'
-                        : 'bg-gray-100 text-gray-800'
+                      ? 'bg-gradient-to-r from-sakura-500 to-peach-500 text-white shadow-md'
+                      : 'bg-white text-gray-800 border border-sakura-100 shadow-sm'
                       }`}>
                       {msg.content}
                     </div>
@@ -496,12 +496,12 @@ const LoveCounselingApp = () => {
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                     placeholder="恋愛の悩みを入力..."
-                    className="flex-1 p-3 rounded-full border-2 border-gray-200 focus:border-pink-500 focus:outline-none"
+                    className="flex-1 p-3 rounded-full border-2 border-sakura-100 focus:border-sakura-500 focus:outline-none"
                   />
                   <button
                     onClick={sendMessage}
                     disabled={isLoading || !inputText.trim()}
-                    className="bg-gradient-to-r from-pink-500 to-purple-500 text-white p-3 rounded-full hover:shadow-lg transition-all disabled:opacity-50"
+                    className="bg-gradient-to-r from-sakura-500 to-peach-500 text-white p-3 rounded-full hover:shadow-lg transition-all disabled:opacity-50"
                   >
                     <Send className="w-5 h-5" />
                   </button>
@@ -512,39 +512,39 @@ const LoveCounselingApp = () => {
 
           {activeTab === 'fortune' && (
             <div className="bg-white rounded-3xl shadow-xl p-6">
-              <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-sakura-500 to-peach-500 bg-clip-text text-transparent">
                 今日の恋愛運
               </h2>
 
               {!fortuneRevealed ? (
                 <div className="text-center py-12">
-                  <div className="w-32 h-48 mx-auto mb-6 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl shadow-2xl flex items-center justify-center cursor-pointer hover:scale-105 transition-transform relative overflow-hidden"
+                  <div className="w-32 h-48 mx-auto mb-6 bg-gradient-to-br from-peach-400 to-sakura-500 rounded-xl shadow-2xl flex items-center justify-center cursor-pointer hover:scale-105 transition-transform relative overflow-hidden"
                     onClick={generateDailyFortune}>
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-pink-400/20 animate-pulse"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-peach-400/20 to-sakura-400/20 animate-pulse"></div>
                     <Moon className="w-16 h-16 text-white relative z-10" />
                   </div>
                   <button
                     onClick={generateDailyFortune}
-                    className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
+                    className="bg-gradient-to-r from-sakura-500 to-peach-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
                   >
                     カードをめくる
                   </button>
                 </div>
               ) : (
                 <div className="text-center animate-fade-in">
-                  <div className="mb-6 p-6 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl">
-                    <div className="text-xl font-bold text-purple-600 mb-2">{dailyFortune.card}</div>
+                  <div className="mb-6 p-6 bg-gradient-to-br from-peach-50 to-sakura-50 rounded-2xl border border-sakura-100">
+                    <div className="text-xl font-bold text-peach-600 mb-2">{dailyFortune.card}</div>
                     <Sun className="w-12 h-12 mx-auto text-yellow-500 mb-2" />
                   </div>
-                  <div className="text-6xl font-bold text-pink-500 mb-4">{dailyFortune.luck}%</div>
+                  <div className="text-6xl font-bold text-sakura-500 mb-4">{dailyFortune.luck}%</div>
                   <div className="text-xl mb-6">{dailyFortune.message}</div>
-                  <div className="bg-pink-50 p-4 rounded-2xl">
+                  <div className="bg-sakura-50 p-4 rounded-2xl border border-sakura-100">
                     <p className="text-sm text-gray-600 mb-2">ラッキーアイテム</p>
-                    <p className="text-lg font-semibold text-pink-600">{dailyFortune.item}</p>
+                    <p className="text-lg font-semibold text-sakura-600">{dailyFortune.item}</p>
                   </div>
                   <button
                     onClick={() => setFortuneRevealed(false)}
-                    className="mt-6 text-purple-500 hover:text-purple-600 transition-colors"
+                    className="mt-6 text-peach-500 hover:text-peach-600 transition-colors"
                   >
                     もう一度めくる
                   </button>
@@ -555,7 +555,7 @@ const LoveCounselingApp = () => {
 
           {activeTab === 'quiz' && (
             <div className="bg-white rounded-3xl shadow-xl p-6">
-              <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-sakura-500 to-peach-500 bg-clip-text text-transparent">
                 恋愛性格診断
               </h2>
 
@@ -568,7 +568,7 @@ const LoveCounselingApp = () => {
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
-                        className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full transition-all duration-300"
+                        className="bg-gradient-to-r from-sakura-500 to-peach-500 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${(quizStep / quizQuestions.length) * 100}%` }}
                       ></div>
                     </div>
@@ -583,7 +583,7 @@ const LoveCounselingApp = () => {
                         <button
                           key={idx}
                           onClick={() => submitQuizAnswer(idx)}
-                          className="w-full p-4 text-left rounded-xl border-2 border-gray-200 hover:border-pink-500 hover:bg-pink-50 transition-all"
+                          className="w-full p-4 text-left rounded-xl border-2 border-gray-200 hover:border-sakura-500 hover:bg-sakura-50 transition-all"
                         >
                           {option}
                         </button>
@@ -593,10 +593,10 @@ const LoveCounselingApp = () => {
                 </div>
               ) : (
                 <div className="text-center animate-fade-in">
-                  <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-pink-400 to-purple-400 rounded-full flex items-center justify-center">
+                  <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-sakura-400 to-peach-400 rounded-full flex items-center justify-center">
                     <Heart className="w-12 h-12 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-2 text-pink-600">{quizResult.name}</h3>
+                  <h3 className="text-2xl font-bold mb-2 text-sakura-600">{quizResult.name}</h3>
                   <p className="text-gray-700 mb-6 leading-relaxed">{quizResult.description}</p>
                   <button
                     onClick={() => {
@@ -604,7 +604,7 @@ const LoveCounselingApp = () => {
                       setQuizAnswers([]);
                       setQuizResult(null);
                     }}
-                    className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
+                    className="bg-gradient-to-r from-sakura-500 to-peach-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
                   >
                     もう一度診断する
                   </button>
@@ -615,7 +615,7 @@ const LoveCounselingApp = () => {
 
           {activeTab === 'compatibility' && (
             <div className="bg-white rounded-3xl shadow-xl p-6">
-              <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-sakura-500 to-peach-500 bg-clip-text text-transparent">
                 相性診断
               </h2>
 
@@ -631,7 +631,7 @@ const LoveCounselingApp = () => {
                         placeholder="年"
                         value={compatibilityInput.userYear}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, userYear: e.target.value })}
-                        className="flex-1 p-3 rounded-xl border-2 border-gray-200 focus:border-pink-500 focus:outline-none"
+                        className="flex-1 p-3 rounded-xl border-2 border-sakura-100 focus:border-sakura-500 focus:outline-none"
                         min="1900"
                         max="2100"
                       />
@@ -640,7 +640,7 @@ const LoveCounselingApp = () => {
                         placeholder="月"
                         value={compatibilityInput.userMonth}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, userMonth: e.target.value })}
-                        className="w-20 p-3 rounded-xl border-2 border-gray-200 focus:border-pink-500 focus:outline-none"
+                        className="w-20 p-3 rounded-xl border-2 border-sakura-100 focus:border-sakura-500 focus:outline-none"
                         min="1"
                         max="12"
                       />
@@ -649,7 +649,7 @@ const LoveCounselingApp = () => {
                         placeholder="日"
                         value={compatibilityInput.userDay}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, userDay: e.target.value })}
-                        className="w-20 p-3 rounded-xl border-2 border-gray-200 focus:border-pink-500 focus:outline-none"
+                        className="w-20 p-3 rounded-xl border-2 border-sakura-100 focus:border-sakura-500 focus:outline-none"
                         min="1"
                         max="31"
                       />
@@ -657,7 +657,7 @@ const LoveCounselingApp = () => {
                   </div>
 
                   <div className="text-center">
-                    <Heart className="w-8 h-8 mx-auto text-pink-400" />
+                    <Heart className="w-8 h-8 mx-auto text-sakura-400" />
                   </div>
 
                   <div>
@@ -670,7 +670,7 @@ const LoveCounselingApp = () => {
                         placeholder="年"
                         value={compatibilityInput.partnerYear}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, partnerYear: e.target.value })}
-                        className="flex-1 p-3 rounded-xl border-2 border-gray-200 focus:border-pink-500 focus:outline-none"
+                        className="flex-1 p-3 rounded-xl border-2 border-sakura-100 focus:border-sakura-500 focus:outline-none"
                         min="1900"
                         max="2100"
                       />
@@ -679,7 +679,7 @@ const LoveCounselingApp = () => {
                         placeholder="月"
                         value={compatibilityInput.partnerMonth}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, partnerMonth: e.target.value })}
-                        className="w-20 p-3 rounded-xl border-2 border-gray-200 focus:border-pink-500 focus:outline-none"
+                        className="w-20 p-3 rounded-xl border-2 border-sakura-100 focus:border-sakura-500 focus:outline-none"
                         min="1"
                         max="12"
                       />
@@ -688,7 +688,7 @@ const LoveCounselingApp = () => {
                         placeholder="日"
                         value={compatibilityInput.partnerDay}
                         onChange={(e) => setCompatibilityInput({ ...compatibilityInput, partnerDay: e.target.value })}
-                        className="w-20 p-3 rounded-xl border-2 border-gray-200 focus:border-pink-500 focus:outline-none"
+                        className="w-20 p-3 rounded-xl border-2 border-sakura-100 focus:border-sakura-500 focus:outline-none"
                         min="1"
                         max="31"
                       />
@@ -699,7 +699,7 @@ const LoveCounselingApp = () => {
                     onClick={calculateCompatibility}
                     disabled={!compatibilityInput.userYear || !compatibilityInput.userMonth || !compatibilityInput.userDay ||
                       !compatibilityInput.partnerYear || !compatibilityInput.partnerMonth || !compatibilityInput.partnerDay}
-                    className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-4 rounded-full font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+                    className="w-full bg-gradient-to-r from-sakura-500 to-peach-500 text-white py-4 rounded-full font-semibold hover:shadow-lg transition-all disabled:opacity-50"
                   >
                     相性を診断する
                   </button>
@@ -712,7 +712,7 @@ const LoveCounselingApp = () => {
                         cx="80"
                         cy="80"
                         r="70"
-                        stroke="#fce7f3"
+                        stroke="#ffe4e6"
                         strokeWidth="12"
                         fill="none"
                       />
@@ -729,18 +729,18 @@ const LoveCounselingApp = () => {
                       />
                       <defs>
                         <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" stopColor="#ec4899" />
-                          <stop offset="100%" stopColor="#a855f7" />
+                          <stop offset="0%" stopColor="#f43f5e" />
+                          <stop offset="100%" stopColor="#f97316" />
                         </linearGradient>
                       </defs>
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-pink-500">{compatibilityResult.score}%</span>
+                      <span className="text-4xl font-bold text-sakura-500">{compatibilityResult.score}%</span>
                     </div>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-pink-600 mb-3">{compatibilityResult.message}</h3>
-                  <div className="bg-pink-50 p-5 rounded-2xl mb-6">
+                  <h3 className="text-2xl font-bold text-sakura-600 mb-3">{compatibilityResult.message}</h3>
+                  <div className="bg-sakura-50 p-5 rounded-2xl mb-6 border border-sakura-100">
                     <p className="text-gray-700 leading-relaxed text-left">{compatibilityResult.detail}</p>
                   </div>
 
@@ -749,7 +749,7 @@ const LoveCounselingApp = () => {
                       setCompatibilityResult(null);
                       setCompatibilityInput({ userYear: '', userMonth: '', userDay: '', partnerYear: '', partnerMonth: '', partnerDay: '' });
                     }}
-                    className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
+                    className="bg-gradient-to-r from-sakura-500 to-peach-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
                   >
                     もう一度診断する
                   </button>
@@ -764,19 +764,19 @@ const LoveCounselingApp = () => {
           <div className="max-w-4xl mx-auto flex justify-around p-2">
             <button
               onClick={() => setActiveTab('chat')}
-              className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${activeTab === 'chat' ? 'text-pink-500 bg-pink-50' : 'text-gray-400'
+              className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${activeTab === 'chat' ? 'text-sakura-600 bg-sakura-50 scale-110' : 'text-gray-400'
                 }`}
             >
               <MessageCircle className="w-6 h-6" />
-              <span className="text-xs">相談</span>
+              <span className="text-xs font-bold">相談</span>
             </button>
             <button
               onClick={() => setActiveTab('fortune')}
-              className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${activeTab === 'fortune' ? 'text-pink-500 bg-pink-50' : 'text-gray-400'
+              className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${activeTab === 'fortune' ? 'text-sakura-600 bg-sakura-50 scale-110' : 'text-gray-400'
                 }`}
             >
               <Sparkles className="w-6 h-6" />
-              <span className="text-xs">占い</span>
+              <span className="text-xs font-bold">占い</span>
             </button>
             <button
               onClick={() => setActiveTab('quiz')}
