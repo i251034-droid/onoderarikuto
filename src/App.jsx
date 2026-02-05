@@ -93,7 +93,7 @@ const LoveCounselingApp = () => {
         : "あなたは実践的な恋愛アドバイザーです。友達と話すような親しみやすい口調で、具体的で実行可能な解決策を箇条書きで提示してください。各文の終わりには必ず改行を入れ、解決策は「・」を使って箇条書きにしてください。";
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-001:generateContent?key=${apiKey}`,
         {
           method: "POST",
           headers: {
