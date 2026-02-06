@@ -209,20 +209,20 @@ function App() {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
-  
+
   // 占い
   const [fortuneResult, setFortuneResult] = useState(null);
-  
+
   // 診断
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState([]);
   const [quizResult, setQuizResult] = useState(null);
-  
+
   // 相性
   const [userBirthday, setUserBirthday] = useState('');
   const [partnerBirthday, setPartnerBirthday] = useState('');
   const [compatibilityResult, setCompatibilityResult] = useState(null);
-  
+
   const chatEndRef = useRef(null);
 
   useEffect(() => {
@@ -243,7 +243,7 @@ function App() {
     localStorage.setItem('avatar', type);
   };
 
-  // Anthropic APIでメッセージ送信
+  // Gemini APIでメッセージ送信
   const sendMessage = async () => {
     if (!inputText.trim() || isLoading) return;
 
@@ -253,12 +253,12 @@ function App() {
     setIsLoading(true);
 
     try {
-      const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
       if (!apiKey) {
         setMessages(prev => [...prev, {
           role: 'assistant',
-          content: 'APIキーが設定されていません。\n\n.envファイルにVITE_ANTHROPIC_API_KEYを設定してください。'
+          content: 'APIキーが設定されていません。\n\n.envファイルにVITE_GEMINI_API_KEYを設定してください。'
         }]);
         setIsLoading(false);
         return;
@@ -268,19 +268,21 @@ function App() {
         ? 'あなたは優しい恋愛相談の友達です。カジュアルで親しみやすい口調で、相手の気持ちに寄り添い共感してください。「そうなんだ！」「わかる〜」「それは辛いよね」などの相づちを使い、文章の終わりは必ず改行してください。会話調で自然に話してください。'
         : 'あなたは恋愛アドバイザーです。具体的な解決策を箇条書きで提示してください。各項目は「・」で始め、改行して読みやすくしてください。';
 
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1024,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: inputText }]
+          system_instruction: {
+            parts: [{ text: systemPrompt }]
+          },
+          contents: [{
+            parts: [{ text: inputText }]
+          }],
+          generationConfig: {
+            maxOutputTokens: 1024,
+          }
         })
       });
 
@@ -290,10 +292,10 @@ function App() {
         throw new Error(data.error.message || 'API Error');
       }
 
-      if (data.content && data.content[0]?.text) {
+      if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
         setMessages(prev => [...prev, {
           role: 'assistant',
-          content: data.content[0].text
+          content: data.candidates[0].content.parts[0].text
         }]);
       }
     } catch (error) {
@@ -358,20 +360,20 @@ function App() {
       <div className="min-h-screen gradient-bg flex items-center justify-center p-4 relative overflow-hidden">
         <FloatingHearts />
         <SparkleEffects />
-        
+
         <div className="glass-card p-10 max-w-lg w-full text-center relative z-10 animate-slideUp">
           <div className="mb-8">
             <Heart className="w-20 h-20 mx-auto text-pink-500 animate-bounce" />
           </div>
-          
+
           <h1 className="text-4xl font-bold mb-4 gradient-text">
             恋愛相談アプリ
           </h1>
-          
+
           <p className="text-gray-600 mb-10">
             あなたのアバターを選んでください ✨
           </p>
-          
+
           <div className="flex gap-6 justify-center">
             <button
               onClick={() => selectAvatar('female')}
@@ -418,11 +420,10 @@ function App() {
               <button
                 key={tab.id}
                 onClick={() => setCurrentTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl font-bold transition-all duration-300 ${
-                  currentTab === tab.id
+                className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl font-bold transition-all duration-300 ${currentTab === tab.id
                     ? 'gradient-pink-purple text-white shadow-lg'
                     : 'text-gray-600 hover:bg-pink-50'
-                }`}
+                  }`}
               >
                 <tab.icon className="w-5 h-5" />
                 <span className="hidden sm:inline">{tab.label}</span>
@@ -439,22 +440,20 @@ function App() {
               <div className="flex gap-2 p-1 bg-white rounded-full">
                 <button
                   onClick={() => setMode('empathy')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-full font-bold transition-all ${
-                    mode === 'empathy'
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-full font-bold transition-all ${mode === 'empathy'
                       ? 'gradient-pink-purple text-white'
                       : 'text-gray-600'
-                  }`}
+                    }`}
                 >
                   <Heart className="w-4 h-4" />
                   共感重視
                 </button>
                 <button
                   onClick={() => setMode('solution')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-full font-bold transition-all ${
-                    mode === 'solution'
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-full font-bold transition-all ${mode === 'solution'
                       ? 'gradient-pink-purple text-white'
                       : 'text-gray-600'
-                  }`}
+                    }`}
                 >
                   <Wand2 className="w-4 h-4" />
                   解決策提示
@@ -470,7 +469,7 @@ function App() {
                   <p>恋愛の悩みを相談してみてください</p>
                 </div>
               )}
-              
+
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
@@ -487,7 +486,7 @@ function App() {
                   </div>
                 </div>
               ))}
-              
+
               {isLoading && (
                 <div className="flex justify-start mb-4">
                   <div className="w-10 h-10 rounded-full gradient-pink-purple flex items-center justify-center mr-2">
